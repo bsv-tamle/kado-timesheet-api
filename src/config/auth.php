@@ -121,4 +121,11 @@ return [
     */
     'jwt_ttl_seconds' => (int) env('AUTH_JWT_TTL_SECONDS', 3600),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Default temporary password (local/testing convenience)
+    |--------------------------------------------------------------------------
+    */
+    'default_temp_password' => env('AUTH_DEFAULT_TEMP_PASSWORD'),
+
 ];

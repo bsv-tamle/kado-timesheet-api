@@ -3,6 +3,7 @@
 use App\Http\Middleware\ApiCorsMiddleware;
 use App\Http\Middleware\ApiJwtAuthenticate;
 use App\Http\Middleware\EnsureAdminRole;
+use App\Http\Middleware\EnsureEmployeeRole;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
@@ -25,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'api.jwt' => ApiJwtAuthenticate::class,
             'role.admin' => EnsureAdminRole::class,
+            'role.employee' => EnsureEmployeeRole::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\AdminEmployeeProjectController;
 use App\Http\Controllers\Api\AdminProjectController;
 use App\Http\Controllers\Api\AdminUserController;
+use App\Http\Controllers\Api\EmployeeTimesheetController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
@@ -29,4 +30,12 @@ Route::prefix('v1')->group(function (): void {
             Route::post('/employee-projects/assign', [AdminEmployeeProjectController::class, 'assign']);
             Route::post('/employee-projects/unassign', [AdminEmployeeProjectController::class, 'unassign']);
         });
+
+    Route::middleware(['api.jwt', 'role.employee'])->group(function (): void {
+        Route::get('/my-projects', [EmployeeTimesheetController::class, 'myProjects']);
+        Route::get('/timesheets', [EmployeeTimesheetController::class, 'index']);
+        Route::post('/timesheets', [EmployeeTimesheetController::class, 'store']);
+        Route::put('/timesheets/{entryId}', [EmployeeTimesheetController::class, 'update']);
+        Route::delete('/timesheets/details/{detailId}', [EmployeeTimesheetController::class, 'destroyDetail']);
+    });
 });

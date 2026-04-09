@@ -11,20 +11,28 @@ if [[ "${AUTO_SETUP}" == "true" && ! -f artisan ]]; then
   composer create-project laravel/laravel . --prefer-dist --no-interaction
 fi
 
-if [[ -f artisan ]]; then
+if [[ -f artisan && "${APP_ENV}" == "local" ]]; then
   if [[ ! -f .env ]]; then
     cp .env.example .env
   fi
 
-  php artisan key:generate --force >/dev/null 2>&1 || true
+  if [[ ! -f vendor/autoload.php ]]; then
+    composer install
+  fi
+
+  php artisan key:generate --force >/dev/null 2>&1
 
   # Keep container env as the source of truth for DB connection.
-  php artisan config:clear >/dev/null 2>&1 || true
+  php artisan config:clear >/dev/null 2>&1
 
   if [[ "${AUTO_MIGRATE}" == "true" ]]; then
     echo "[entrypoint] Running migrations..."
-    php artisan migrate --force || true
+    php artisan migrate --force
   fi
+fi
+
+if [[ "${APP_ENV}" != "local" ]]; then
+  php artisan optimize >/dev/null 2>&1
 fi
 
 echo "[entrypoint] Starting php-fpm..."

@@ -177,14 +177,7 @@ class EmployeeTimesheetController extends ApiController
                 'status' => 'draft',
             ]);
 
-            foreach ($validated['details'] as $detail) {
-                TimesheetEntryDetail::query()->create([
-                    'timesheet_entry_id' => $entry->id,
-                    'project_id' => (int) $detail['project_id'],
-                    'hours_worked' => (float) $detail['hours_worked'],
-                    'note' => $detail['note'] ?? null,
-                ]);
-            }
+            $this->createDetails($entry, $validated['details']);
 
             return $entry;
         });
@@ -265,14 +258,7 @@ class EmployeeTimesheetController extends ApiController
 
             $entry->details()->delete();
 
-            foreach ($validated['details'] as $detail) {
-                TimesheetEntryDetail::query()->create([
-                    'timesheet_entry_id' => $entry->id,
-                    'project_id' => (int) $detail['project_id'],
-                    'hours_worked' => (float) $detail['hours_worked'],
-                    'note' => $detail['note'] ?? null,
-                ]);
-            }
+            $this->createDetails($entry, $validated['details']);
         });
 
         return $this->successResponse([
@@ -327,6 +313,21 @@ class EmployeeTimesheetController extends ApiController
         });
 
         return $this->successResponse($result, 'Timesheet detail deleted successfully');
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $details
+     */
+    private function createDetails(TimesheetEntry $entry, array $details): void
+    {
+        foreach ($details as $detail) {
+            TimesheetEntryDetail::query()->create([
+                'timesheet_entry_id' => $entry->id,
+                'project_id' => (int) $detail['project_id'],
+                'hours_worked' => (float) $detail['hours_worked'],
+                'note' => $detail['note'] ?? null,
+            ]);
+        }
     }
 
     /**

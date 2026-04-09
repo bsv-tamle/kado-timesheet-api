@@ -128,4 +128,11 @@ return [
     */
     'default_temp_password' => env('AUTH_DEFAULT_TEMP_PASSWORD'),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Frontend reset password URL (used in reset email)
+    |--------------------------------------------------------------------------
+    */
+    'reset_password_url' => env('AUTH_RESET_PASSWORD_URL', 'http://localhost:5173/reset-password'),
+
 ];

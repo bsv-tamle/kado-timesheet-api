@@ -56,3 +56,12 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## API Documentation (Swagger)
+
+- Swagger UI: `/api-docs`
+- OpenAPI spec: `/openapi.yaml`
+
+When running locally with `php artisan serve`, open:
+
+- `http://127.0.0.1:8000/api-docs`

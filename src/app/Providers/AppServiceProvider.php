@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Contracts\PasswordResetMailer;
+use App\Support\LaravelPasswordResetMailer;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Bind a mailer abstraction so we can switch to dedicated SES integration later.
+        $this->app->bind(PasswordResetMailer::class, LaravelPasswordResetMailer::class);
     }
 
     /**

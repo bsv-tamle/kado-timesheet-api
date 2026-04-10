@@ -43,7 +43,7 @@ class AdminProjectController extends ApiController
             ->paginate((int) ($validated['per_page'] ?? 20));
 
         $projectItems = collect($projects->items())
-            ->map(fn (Project $project): array => $this->serializeProjectSummary($project))
+            ->map(fn (Project $project): array => $this->serializeProject($project))
             ->values()
             ->all();
 
@@ -90,7 +90,7 @@ class AdminProjectController extends ApiController
             return $this->errorResponse('Project not found.', 404);
         }
 
-        return $this->successResponse($this->serializeProjectDetail($project));
+        return $this->successResponse($this->serializeProject($project));
     }
 
     public function store(Request $request): JsonResponse
@@ -106,7 +106,7 @@ class AdminProjectController extends ApiController
         $project = Project::query()->create($validated);
 
         return $this->successResponse(
-            $this->serializeProjectDetail($project),
+            $this->serializeProject($project),
             'Project created successfully',
             201
         );
@@ -136,7 +136,7 @@ class AdminProjectController extends ApiController
         $project->fill($validated);
         $project->save();
 
-        return $this->successResponse($this->serializeProjectDetail($project), 'Project updated successfully');
+        return $this->successResponse($this->serializeProject($project), 'Project updated successfully');
     }
 
     public function updateStatus(Request $request, int $id): JsonResponse
@@ -161,23 +161,7 @@ class AdminProjectController extends ApiController
     /**
      * @return array<string, mixed>
      */
-    private function serializeProjectSummary(Project $project): array
-    {
-        return [
-            'id' => $project->id,
-            'project_code' => $project->project_code,
-            'project_name' => $project->project_name,
-            'status' => $project->status,
-            'billable_flag' => (bool) $project->billable_flag,
-            'description' => $project->description,
-            'updated_at' => $project->updated_at?->toISOString(),
-        ];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function serializeProjectDetail(Project $project): array
+    private function serializeProject(Project $project): array
     {
         return [
             'id' => $project->id,

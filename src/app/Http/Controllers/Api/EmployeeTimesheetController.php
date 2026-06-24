@@ -174,7 +174,8 @@ class EmployeeTimesheetController extends ApiController
                 'employee_id' => $employee->id,
                 'work_date' => $workDate->toDateString(),
                 'total_hours' => $totalHours,
-                'status' => 'draft',
+                'status' => 'submitted',
+                'submitted_at' => now(),
             ]);
 
             $this->createDetails($entry, $validated['details']);
@@ -254,6 +255,8 @@ class EmployeeTimesheetController extends ApiController
             $entry->forceFill([
                 'work_date' => $workDate->toDateString(),
                 'total_hours' => $totalHours,
+                'status' => 'submitted',
+                'submitted_at' => now(),
             ])->save();
 
             $entry->details()->delete();

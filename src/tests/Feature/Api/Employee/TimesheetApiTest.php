@@ -157,6 +157,7 @@ class TimesheetApiTest extends TestCase
             'employee_id' => $employee->id,
             'work_date' => $workDate.' 00:00:00',
             'total_hours' => 7.5,
+            'status' => 'submitted',
         ]);
     }
 
@@ -276,6 +277,7 @@ class TimesheetApiTest extends TestCase
         $this->assertDatabaseHas('timesheet_entries', [
             'id' => $entry->id,
             'total_hours' => 4.5,
+            'status' => 'submitted',
         ]);
         $entry->refresh();
         $this->assertSame($updatedWorkDate, $entry->work_date?->toDateString());
